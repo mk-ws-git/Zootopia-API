@@ -1,4 +1,29 @@
 import json
+import requests
+import os
+
+API_URL = "https://api.api-ninjas.com/v1/animals"
+
+def fetch_animals_from_api(animal_name):
+    api_key = os.environ.get("NINJAS_API_KEY")
+    if not api_key:
+        raise RuntimeError("NINJAS_API_KEY is not set")
+
+    response = requests.get(
+        API_URL,
+        params={"name": animal_name},
+        headers={"X-Api-Key": api_key},
+        timeout=20,
+    )
+
+    print("Status code:", response.status_code)
+    response.raise_for_status()
+
+    data = response.json()
+
+    if isinstance(data, list):
+        return data
+    return []
 
 
 def get_nested_value(obj, keys):
@@ -120,7 +145,7 @@ def filter_by_skin_type(animals, selected_skin_type):
 
 def main():
     """Prompt for skin_type, then generate animals.html."""
-    animals = json.loads(read_file("animals_data.json"))
+    animals = fetch_animals_from_api("Fox")
     html_template = read_file("animals_template.html")
 
     # 1) Show available skin types
