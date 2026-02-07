@@ -11,7 +11,7 @@ Installation:
 1. Clone the repository:
    ```
    bash
-   git clone <https://github.com/mk-ws-git/Zootopia-API>
+   git clone https://github.com/mk-ws-git/Zootopia-API.git
    cd Zootopia-Codio-API
    
 2. Install the required dependencies:
