@@ -115,6 +115,16 @@ def write_file(filepath, content):
         f.write(content)
 
 
+def animal_not_found_html(animal_name):
+    """Return a not-found message as HTML."""
+    safe = (
+        animal_name.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+    return '<h2 class="not-found">The animal <em>"' + safe + "\" doesn't exist.</em></h2>\n"
+
+
 def main():
     """Prompt for user input, fetch animal data via API, and generate animals.html."""
     html_template = read_file("animals_template.html")
@@ -124,7 +134,11 @@ def main():
         animal_name = input("Enter a name of an animal: ").strip()
 
     animals = fetch_animals_from_api(animal_name)
-    animals_output = build_animals_output(animals)
+
+    if len(animals) == 0:
+        animals_output = animal_not_found_html(animal_name)
+    else:
+        animals_output = build_animals_output(animals)
 
     if "__REPLACE_ANIMALS_INFO__" in html_template:
         new_html = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_output)
