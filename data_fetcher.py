@@ -1,4 +1,8 @@
+import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def fetch_data(animal_name):
   """
@@ -18,10 +22,10 @@ def fetch_data(animal_name):
   },
   """
   API_URL = "https://api.api-ninjas.com/v1/animals"
-  API_KEY = "OJq7f3WquOMY5L8tnWP4k3QADH85CVB3nYSmU3Tl"
+  API_KEY = os.getenv('API_KEY')
 
   if not API_KEY:
-      raise RuntimeError("NINJAS_API_KEY is not set")
+      raise RuntimeError("API_KEY is not set")
 
   response = requests.get(
       API_URL,
