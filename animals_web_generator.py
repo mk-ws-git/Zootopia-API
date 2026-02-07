@@ -1,30 +1,4 @@
-import json
-import requests
-import os
-
-API_URL = "https://api.api-ninjas.com/v1/animals"
-
-def fetch_animals_from_api(animal_name):
-    api_key = os.environ.get("NINJAS_API_KEY")
-    if not api_key:
-        raise RuntimeError("NINJAS_API_KEY is not set")
-
-    response = requests.get(
-        API_URL,
-        params={"name": animal_name},
-        headers={"X-Api-Key": api_key},
-        timeout=20,
-    )
-
-    print("Status code:", response.status_code)
-    response.raise_for_status()
-
-    data = response.json()
-
-    if isinstance(data, list):
-        return data
-    return []
-
+import data_fetcher
 
 def get_nested_value(obj, keys):
     """Return nested dict value or None."""
@@ -133,7 +107,7 @@ def main():
     while animal_name == "":
         animal_name = input("Enter a name of an animal: ").strip()
 
-    animals = fetch_animals_from_api(animal_name)
+    animals = data_fetcher.fetch_data(animal_name)
 
     if len(animals) == 0:
         animals_output = animal_not_found_html(animal_name)
