@@ -116,15 +116,18 @@ def write_file(filepath, content):
 
 
 def main():
-    """Fetch animal data via API and generate animals.html."""
-    animals = fetch_animals_from_api("Fox")
+    """Prompt for user input, fetch animal data via API, and generate animals.html."""
     html_template = read_file("animals_template.html")
 
+    animal_name = input("Enter a name of an animal: ").strip()
+    while animal_name == "":
+        animal_name = input("Enter a name of an animal: ").strip()
+
+    animals = fetch_animals_from_api(animal_name)
     animals_output = build_animals_output(animals)
 
     if "__REPLACE_ANIMALS_INFO__" in html_template:
         new_html = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_output)
-
     else:
         if "</ul>" in html_template:
             new_html = html_template.replace("</ul>", animals_output + "\n</ul>", 1)
@@ -136,7 +139,9 @@ def main():
         print("Failed to write animals.html:", e)
         raise
 
-    print("\nanimals.html has been created.")
+    write_file("animals.html", new_html)
+
+    print("\nanimals.html has been sucessfully generated.")
     print("Animals shown:", len(animals))
 
 if __name__ == '__main__':
